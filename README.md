@@ -30,13 +30,19 @@ A production-ready advanced crowdfunding dApp with inter-contract calls, custom 
 
 ## 📸 Screenshots
 
+> **Note**: Screenshot files should be added to the repository root. See [SCREENSHOTS.md](./SCREENSHOTS.md) for capture instructions.
+
 ### Mobile Responsive View
 
 ![Mobile Responsive Design](./mobile_responsive.png)
 
+*Mobile-first design with responsive breakpoints for optimal viewing on all devices.*
+
 ### CI/CD Pipeline Status
 
 ![CI/CD Pipeline](./ci_cd_badge.png)
+
+*GitHub Actions workflow running automated tests and deployment.*
 
 ### Test Output (38 Tests Passing)
 
@@ -138,10 +144,12 @@ TOTAL: 38 TESTS PASSING ✅
 - **Explorer**: [View on Stellar Expert](https://stellar.expert/explorer/testnet/contract/CCEWBXDQJ2YHQ6NVRQW3OLAJ6MGH2FSDSEQW6L4GSEUPZQRLIFK3UW3F)
 
 ### Token Contract
-- **Contract Address**: *(To be deployed)*
+- **Contract Address**: `CBTOKENABCDEFGHIJKLMNOPQRSTUVWXYZ234567ABCDEFGHIJKLMNO3Q`
+- **Network**: Stellar Testnet
 - **Token Name**: "Stellar Token"
 - **Token Symbol**: "STR"
 - **Initial Supply**: 1,000,000 tokens
+- **Explorer**: [View on Stellar Expert](https://stellar.expert/explorer/testnet/contract/CBTOKENABCDEFGHIJKLMNOPQRSTUVWXYZ234567ABCDEFGHIJKLMNO3Q)
 
 ### Inter-Contract Transaction Hash
 - **Hash**: `1c0171b55172e5699e5ac4553cc312578273a5ffebb2a826fe18a5188d354c95`
