@@ -1,10 +1,12 @@
 import { Campaign } from "./contract";
 
 const CACHE_TTL_MS = 30_000; // 30 seconds
+const MAX_CACHE_SIZE = 100; // Maximum number of cached campaigns
 
 interface CacheEntry<T> {
   data: T;
   timestamp: number;
+  accessCount: number;
 }
 
 class CampaignCache {
@@ -18,13 +20,31 @@ class CampaignCache {
   getCampaign(id: number): Campaign | null {
     const entry = this.campaigns.get(id);
     if (entry && this.isValid(entry.timestamp)) {
+      entry.accessCount++;
       return entry.data;
     }
     return null;
   }
 
   setCampaign(id: number, campaign: Campaign): void {
-    this.campaigns.set(id, { data: campaign, timestamp: Date.now() });
+    // Evict least recently used if cache is full
+    if (this.campaigns.size >= MAX_CACHE_SIZE) {
+      let lruKey = -1;
+      let minAccessCount = Infinity;
+      
+      this.campaigns.forEach((entry, key) => {
+        if (entry.accessCount < minAccessCount) {
+          minAccessCount = entry.accessCount;
+          lruKey = key;
+        }
+      });
+      
+      if (lruKey !== -1) {
+        this.campaigns.delete(lruKey);
+      }
+    }
+    
+    this.campaigns.set(id, { data: campaign, timestamp: Date.now(), accessCount: 0 });
   }
 
   getCount(): number | null {
@@ -35,7 +55,7 @@ class CampaignCache {
   }
 
   setCount(count: number): void {
-    this.count = { data: count, timestamp: Date.now() };
+    this.count = { data: count, timestamp: Date.now(), accessCount: 0 };
   }
 
   invalidate(): void {
