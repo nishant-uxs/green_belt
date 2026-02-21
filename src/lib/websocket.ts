@@ -132,11 +132,12 @@ export class StellarWebSocket {
   private attemptReconnect() {
     if (this.reconnectAttempts < this.maxReconnectAttempts) {
       this.reconnectAttempts++;
-      console.log(`Attempting to reconnect (${this.reconnectAttempts}/${this.maxReconnectAttempts})...`);
+      const delay = this.reconnectDelay * Math.pow(2, this.reconnectAttempts - 1);
+      console.log(`Attempting to reconnect (${this.reconnectAttempts}/${this.maxReconnectAttempts}) in ${delay}ms...`);
       
       setTimeout(() => {
         this.connect();
-      }, this.reconnectDelay * this.reconnectAttempts);
+      }, delay);
     } else {
       console.error('Max reconnection attempts reached');
       this.statusCallback?.('error');
