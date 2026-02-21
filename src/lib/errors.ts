@@ -30,11 +30,32 @@ export class InsufficientBalanceError extends Error {
   }
 }
 
+export class NetworkError extends Error {
+  public statusCode?: number;
+  
+  constructor(message: string, statusCode?: number) {
+    super(message);
+    this.name = "NetworkError";
+    this.statusCode = statusCode;
+  }
+}
+
+export class ContractError extends Error {
+  public contractId?: string;
+  
+  constructor(message: string, contractId?: string) {
+    super(message);
+    this.name = "ContractError";
+    this.contractId = contractId;
+  }
+}
+
 export function classifyError(error: unknown): Error {
   const message =
     error instanceof Error ? error.message : String(error);
   const lower = message.toLowerCase();
 
+  // Wallet errors
   if (
     lower.includes("not found") ||
     lower.includes("not installed") ||
@@ -44,6 +65,7 @@ export function classifyError(error: unknown): Error {
     return new WalletNotFoundError("Wallet");
   }
 
+  // Transaction rejection
   if (
     lower.includes("user declined") ||
     lower.includes("rejected") ||
@@ -54,6 +76,7 @@ export function classifyError(error: unknown): Error {
     return new TransactionRejectedError();
   }
 
+  // Balance errors
   if (
     lower.includes("insufficient") ||
     lower.includes("underfunded") ||
@@ -62,5 +85,34 @@ export function classifyError(error: unknown): Error {
     return new InsufficientBalanceError("unknown", "unknown");
   }
 
+  // Network errors
+  if (
+    lower.includes("network") ||
+    lower.includes("timeout") ||
+    lower.includes("connection") ||
+    lower.includes("fetch failed")
+  ) {
+    return new NetworkError(message);
+  }
+
+  // Contract errors
+  if (
+    lower.includes("contract") ||
+    lower.includes("invoke") ||
+    lower.includes("execution failed")
+  ) {
+    return new ContractError(message);
+  }
+
   return error instanceof Error ? error : new Error(message);
+}
+
+// Log errors with context for debugging
+export function logError(error: Error, context?: string): void {
+  console.error(`[Error${context ? ` - ${context}` : ''}]:`, {
+    name: error.name,
+    message: error.message,
+    stack: error.stack,
+    timestamp: new Date().toISOString(),
+  });
 }
