@@ -2,7 +2,7 @@
 mod test;
 use soroban_sdk::{
     contract, contractimpl, contracttype, symbol_short, Address, Env, String,
-    log, Symbol,
+    log, Symbol, IntoVal,
 };
 
 #[contracttype]
@@ -160,14 +160,26 @@ impl CrowdfundContract {
         // Get token contract address
         let token_address = Self::get_token_contract(env.clone());
 
-        // Transfer tokens from donor to campaign creator
-        let token_client = soroban_sdk::contractclient::ContractClient::new(&env, &token_address);
-        token_client.call(
+        // Transfer tokens from donor to campaign creator using env.invoke_contract
+        let donor_val: soroban_sdk::Val = donor.clone().into_val(&env);
+        let creator_val: soroban_sdk::Val = campaign.creator.clone().into_val(&env);
+        let amount_val: soroban_sdk::Val = amount.into_val(&env);
+        
+        let args: soroban_sdk::Vec<soroban_sdk::Val> = soroban_sdk::vec![
+            &env,
+            donor_val,
+            creator_val,
+            amount_val,
+        ];
+        
+        let transfer_result: soroban_sdk::Vec<soroban_sdk::Val> = env.invoke_contract(
+            &token_address,
             &Symbol::new(&env, "transfer"),
-            soroban_sdk::xdr::ScVal::from(donor.clone()),
-            soroban_sdk::xdr::ScVal::from(campaign.creator.clone()),
-            soroban_sdk::xdr::ScVal::from(amount),
+            args,
         );
+        
+        // Check if the transfer was successful (empty result means success)
+        assert!(transfer_result.is_empty(), "Token transfer failed");
 
         // Update campaign raised amount
         campaign.raised += amount;
@@ -177,7 +189,7 @@ impl CrowdfundContract {
 
         // Emit token donation event
         env.events()
-            .publish((symbol_short!("token_donate"),), (campaign_id, donor, amount));
+            .publish((Symbol::new(&env, "token_donate"),), (campaign_id, donor, amount));
 
         log!(&env, "Token donation of {} to campaign {}", amount, campaign_id);
     }
