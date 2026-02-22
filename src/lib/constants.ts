@@ -13,6 +13,9 @@ export const MOCK_MODE = false;
 export const CONTRACT_ID =
   "CCEWBXDQJ2YHQ6NVRQW3OLAJ6MGH2FSDSEQW6L4GSEUPZQRLIFK3UW3F";
 
+// Token contract ID - will be updated after deployment
+export const TOKEN_CONTRACT_ID = "PLACEHOLDER_TOKEN_CONTRACT_ID";
+
 export const EXPLORER_URL = "https://stellar.expert/explorer/testnet";
 
 export enum WalletType {
