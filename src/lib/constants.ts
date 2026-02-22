@@ -11,7 +11,7 @@ export const MOCK_MODE = false;
 // Placeholder contract ID - update this with your deployed contract
 // For now, using mock mode to demonstrate full functionality
 export const CONTRACT_ID =
-  "CCEWBXDQJ2YHQ6NVRQW3OLAJ6MGH2FSDSEQW6L4GSEUPZQRLIFK3UW3F";
+  "CDDXMPLOTSEJSYNF5NI7IV2BQMB252S7ZFYLDK54Z64GLA6HGNAOUSUT";
 
 // Token contract ID - will be updated after deployment
 export const TOKEN_CONTRACT_ID = "PLACEHOLDER_TOKEN_CONTRACT_ID";
