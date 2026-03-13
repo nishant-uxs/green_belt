@@ -44,11 +44,11 @@ jobs:
       uses: dtolnay/rust-toolchain@stable
       with:
         toolchain: stable
+        targets: wasm32-unknown-unknown
     
     - name: Install Soroban CLI
       run: |
-        wget -qO- https://github.com/stellar/soroban/releases/latest/download/soroban-cli-linux-x86_64.tar.gz | tar xz
-        sudo mv soroban /usr/local/bin/
+        cargo install --locked soroban-cli --features opt
         soroban version
     
     - name: Test crowdfund contract
