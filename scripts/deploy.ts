@@ -62,7 +62,7 @@ try {
     { stdio: 'inherit' }
   );
   console.log('✅ Token contract initialized\n');
-} catch (error) {
+} catch (error: any) {
   console.error('❌ Failed to initialize token contract:', error.message);
   process.exit(1);
 }
@@ -76,7 +76,7 @@ try {
     { stdio: 'inherit' }
   );
   console.log('✅ Token contract linked to crowdfund\n');
-} catch (error) {
+} catch (error: any) {
   console.error('❌ Failed to link token contract:', error.message);
   process.exit(1);
 }
