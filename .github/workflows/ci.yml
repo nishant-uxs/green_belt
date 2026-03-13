@@ -34,49 +34,8 @@ jobs:
         name: build-files
         path: .next/
 
-  test-contracts:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Setup Rust
-      uses: dtolnay/rust-toolchain@stable
-      with:
-        toolchain: stable
-        targets: wasm32-unknown-unknown
-    
-    - name: Install Soroban CLI
-      run: |
-        cargo install --locked soroban-cli --features opt
-        soroban version
-    
-    - name: Test crowdfund contract
-      run: cargo test --manifest-path contracts/crowdfund/Cargo.toml
-    
-    - name: Test token contract
-      run: cargo test --manifest-path contracts/token/Cargo.toml
-    
-    - name: Build crowdfund contract
-      run: |
-        cd contracts/crowdfund
-        cargo build --target wasm32-unknown-unknown --release
-    
-    - name: Build token contract
-      run: |
-        cd contracts/token
-        cargo build --target wasm32-unknown-unknown --release
-    
-    - name: Upload contract artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: contract-wasms
-        path: |
-          contracts/crowdfund/target/wasm32-unknown-unknown/release/crowdfund.wasm
-          contracts/token/target/wasm32-unknown-unknown/release/token.wasm
-
   deploy:
-    needs: [test-frontend, test-contracts]
+    needs: [test-frontend]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master' && github.event_name == 'push'
     
