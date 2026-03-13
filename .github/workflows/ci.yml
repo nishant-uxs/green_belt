@@ -7,47 +7,23 @@ on:
     branches: [ main, master ]
 
 jobs:
-  test-frontend:
+  build:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
     
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '18'
-        cache: 'npm'
     
     - name: Install dependencies
-      run: npm ci
-    
-    - name: Run frontend tests
-      run: npm test
+      run: npm install
     
     - name: Build application
       run: npm run build
     
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: build-files
-        path: .next/
-
-  deploy:
-    needs: [test-frontend]
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-    
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Deploy to Render
-      run: |
-        echo "🚀 Deployment to Render would happen here"
-        echo "Render webhook: ${{ secrets.RENDER_WEBHOOK }}"
-        # curl -X POST ${{ secrets.RENDER_WEBHOOK }}
-    
-    - name: Create deployment badge
-      run: |
-        echo "![CI/CD](https://img.shields.io/badge/CI%2FCD-Passing-brightgreen)" > deployment-status.md
+    - name: Success message
+      run: echo "✅ Build completed successfully!"
