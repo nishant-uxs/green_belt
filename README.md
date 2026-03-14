@@ -14,9 +14,9 @@ A production-ready advanced crowdfunding dApp with inter-contract calls, custom 
 
 ## 🚀 Live Demo
 
-**Live Application**: [https://stellar-orangebelt.onrender.com](https://stellar-orangebelt.onrender.com) ✅ **LIVE**
+**Live Application**: [https://green-belt.onrender.com](https://green-belt.onrender.com) ✅ **LIVE**
 
-**GitHub Repository**: https://github.com/nishant-uxs/stellar-greenbelt
+**GitHub Repository**: https://github.com/nishant-uxs/green_belt
 
 ---
 
